@@ -41,5 +41,6 @@ jobs:
 
       - name: Package and push helm chart
         run: |
+          helm registry login ${{ vars.ACR_URL }} --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }}
           helm package ./charts/aks-store-demo --version ${{ steps.set-variables.outputs.VERSION }}
           helm push ./aks-store-demo-chart-${{ steps.set-variables.outputs.VERSION }}.tgz oci://${{ vars.ACR_URL }}/charts
