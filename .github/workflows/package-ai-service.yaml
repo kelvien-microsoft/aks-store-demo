@@ -28,7 +28,7 @@ jobs:
         id: set-variables
         run: |
           echo "IMAGE=ai-service" >> "$GITHUB_OUTPUT"
-          echo "VERSION=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+          echo "VERSION=$(yq -r .version ./charts/aks-store-demo/Chart.yaml)" >> "$GITHUB_OUTPUT"
           echo "CREATED=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
 
       - name: Env variable output
