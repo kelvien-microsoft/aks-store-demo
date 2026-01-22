@@ -2,13 +2,6 @@
 # uses a github federated identity
 name: test-e2e-main
 
-on:
-  push:
-    branches:
-      - main
-
-  workflow_dispatch:
-
 permissions:
   id-token: write
   contents: read
