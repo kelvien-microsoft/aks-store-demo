@@ -27,7 +27,6 @@ jobs:
       - name: Set environment variables
         id: set-variables
         run: |
-          echo "REPOSITORY=${{ vars.ACR_URL }}" >> "$GITHUB_OUTPUT"
           echo "IMAGE=makeline-service" >> "$GITHUB_OUTPUT"
           echo "VERSION=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
           echo "CREATED=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
@@ -35,7 +34,6 @@ jobs:
       - name: Env variable output
         id: test-variables
         run: |
-          echo ${{ steps.set-variables.outputs.REPOSITORY }}
           echo ${{ steps.set-variables.outputs.IMAGE }}
           echo ${{ steps.set-variables.outputs.VERSION }}
           echo ${{ steps.set-variables.outputs.CREATED }}
@@ -53,17 +51,12 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           allow-no-subscriptions: "true"
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: 'Build and push image'
+        uses: azure/docker-login@v1
         with:
-          context: src/makeline-service
-          file: src/makeline-service/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: "true"
-          tags: |
-            ${{ steps.set-variables.outputs.REPOSITORY }}/${{ steps.set-variables.outputs.IMAGE }}:latest
-            ${{ steps.set-variables.outputs.REPOSITORY }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }}
-          labels: |
-            org.opencontainers.image.source=${{ github.repositoryUrl }}
-            org.opencontainers.image.created=${{ steps.set-variables.outputs.CREATED }}
-            org.opencontainers.image.revision=${{ steps.set-variables.outputs.VERSION }}
+          login-server: ${{ vars.ACR_URL }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - run: |
+          docker build src/ai-service -t ${{ vars.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }} -t ${{ vars.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:latest
+          docker push ${{ vars.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }}
