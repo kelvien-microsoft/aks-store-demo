@@ -24,11 +24,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
       - name: Set environment variables
         id: set-variables
         run: |
-          echo "IMAGE=product-service" >> "$GITHUB_OUTPUT"
-          echo "VERSION=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+          echo "IMAGE=ai-service" >> "$GITHUB_OUTPUT"
+          echo "VERSION=$(yq -r .appVersion ./charts/aks-store-demo/Chart.yaml)" >> "$GITHUB_OUTPUT"
           echo "CREATED=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
 
       - name: Env variable output
