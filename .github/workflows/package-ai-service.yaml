@@ -46,7 +46,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - uses: azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
+      - uses: azure/login@v2.3.0
         name: Azure login
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
