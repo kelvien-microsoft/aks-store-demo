@@ -58,5 +58,5 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
       - run: |
-          docker build src/ai-service -t ${{ secrets.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }} -t ${{ secrets.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:latest
-          docker push ${{ secrets.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }}
+          docker build src/ai-service -t ${{ vars.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }} -t ${{ vars.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:latest
+          docker push ${{ vars.ACR_URL }}/${{ steps.set-variables.outputs.IMAGE }}:${{ steps.set-variables.outputs.VERSION }}
